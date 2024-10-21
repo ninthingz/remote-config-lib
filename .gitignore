@@ -1,0 +1,9 @@
+/.idea
+/.vscode
+cmake-build-debug
+cmake-build-debug-x86
+build
+cmake-build-release
+cmake-build-release-x86
+CMakeUserPresets.json
+/deploy/
