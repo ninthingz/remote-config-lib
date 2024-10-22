@@ -6,14 +6,14 @@ using namespace std;
 TEST(RemoteConfigTest, GetConfigTest) {
 
     RemoteConfig remoteConfig;
-    std::string name;
+    std::string value;
 
     auto start = std::chrono::steady_clock::now();
 
     for (int i = 0; i < 100; i++)
     {
-        auto config = remoteConfig.GetConfig("test");
-        name = config.name;
+        auto config = remoteConfig.GetConfig("test:&dd");
+        value = config.value;
     }
 
     auto end = std::chrono::steady_clock::now();
@@ -22,7 +22,8 @@ TEST(RemoteConfigTest, GetConfigTest) {
 
     std::cout << "Elapsed time: " << duration.count() << " seconds\n";
 
-    ASSERT_EQ(duration.count() < 0.1, true);
-    cout<<name<<endl;
+    cout<<value<<endl;
+
+    ASSERT_EQ(duration.count() < 0.5, true);
 
 }

@@ -54,6 +54,22 @@ RemoteConfig::RemoteConfig(const std::string &url) {
     }
 }
 
+std::string urlEncode(const char* str) {
+    std::string encoded_string;
+    while (*str) {
+        // 字母 数字 -_.~ 直接编码，不翻译
+        if (isalnum((unsigned char)*str) || strchr("-_.~", *str)) {
+            encoded_string += *str;
+        } else {
+            char buf[4];
+            snprintf(buf, sizeof(buf), "%%%02X", (unsigned char)*str);
+            encoded_string += buf;
+        }
+        str++;
+    }
+    return encoded_string;
+}
+
 
 SWConfig RemoteConfig::GetConfig(const std::string &name, long long cache_time) {
     auto now_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -72,7 +88,7 @@ SWConfig RemoteConfig::GetConfig(const std::string &name, long long cache_time) 
     }
 
     httplib::Client cli(url);
-    auto res = cli.Get("/api/v1/config/element?name=" + name);
+    auto res = cli.Get("/api/v1/config/element?name=" + urlEncode(name.c_str()));
     cli.set_default_headers({
                                     {"Content-Type", "application/json"},
                                     {"SIGN",         "0D000721"}
